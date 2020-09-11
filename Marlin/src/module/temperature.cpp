@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 
@@ -37,7 +37,7 @@
 #include "../lcd/ultralcd.h"
 
 #if ENABLED(DWIN_CREALITY_LCD)
-  #include "../lcd/dwin/dwin.h"
+  #include "../lcd/dwin/e3v2/dwin.h"
 #endif
 
 #if ENABLED(EXTENSIBLE_UI)
@@ -195,7 +195,7 @@ const char str_t_thermal_runaway[] PROGMEM = STR_T_THERMAL_RUNAWAY,
   #endif
 
   #if ENABLED(ADAPTIVE_FAN_SLOWING)
-    uint8_t Temperature::fan_speed_scaler[FAN_COUNT] = ARRAY_N(FAN_COUNT, 128, 128, 128, 128, 128, 128);
+    uint8_t Temperature::fan_speed_scaler[FAN_COUNT] = ARRAY_N(FAN_COUNT, 128, 128, 128, 128, 128, 128, 128, 128);
   #endif
 
   /**
@@ -210,23 +210,27 @@ const char str_t_thermal_runaway[] PROGMEM = STR_T_THERMAL_RUNAWAY,
         if (target < EXTRUDERS) singlenozzle_fan_speed[target] = speed;
         return;
       }
-      target = 0; // Always use fan index 0 with SINGLENOZZLE
     #endif
+
+    TERN_(SINGLENOZZLE, target = 0); // Always use fan index 0 with SINGLENOZZLE
 
     if (target >= FAN_COUNT) return;
 
     fan_speed[target] = speed;
-    report_fan_speed(target);
+
+    TERN_(REPORT_FAN_CHANGE, report_fan_speed(target));
   }
 
-  /**
-   * Report print fan speed for a target extruder
-   */
-  void Temperature::report_fan_speed(const uint8_t target) {
-    if (target >= FAN_COUNT) return;
-    PORT_REDIRECT(SERIAL_BOTH);
-    SERIAL_ECHOLNPAIR("M106 P", target, " S", fan_speed[target]);
-  }
+  #if ENABLED(REPORT_FAN_CHANGE)
+    /**
+     * Report print fan speed for a target extruder
+     */
+    void Temperature::report_fan_speed(const uint8_t target) {
+      if (target >= FAN_COUNT) return;
+      PORT_REDIRECT(SERIAL_BOTH);
+      SERIAL_ECHOLNPAIR("M106 P", target, " S", fan_speed[target]);
+    }
+  #endif
 
   #if EITHER(PROBING_FANS_OFF, ADVANCED_PAUSE_FANS_PAUSE)
 
@@ -358,7 +362,7 @@ volatile bool Temperature::raw_temps_ready = false;
 #endif
 
 #if ENABLED(PID_EXTRUSION_SCALING)
-  int16_t Temperature::lpq_len; // Initialized in configuration_store
+  int16_t Temperature::lpq_len; // Initialized in settings.cpp
 #endif
 
 #if HAS_PID_HEATING
@@ -432,6 +436,7 @@ volatile bool Temperature::raw_temps_ready = false;
     SERIAL_ECHOLNPGM(STR_PID_AUTOTUNE_START);
 
     disable_all_heaters();
+    TERN_(AUTO_POWER_CONTROL, powerManager.power_on());
 
     SHV(bias = d = (MAX_BED_POWER) >> 1, bias = d = (PID_MAX) >> 1);
 
@@ -904,7 +909,10 @@ void Temperature::min_temp_error(const heater_ind_t heater) {
           SERIAL_ECHOPAIR(STR_PID_DEBUG, ee, STR_PID_DEBUG_INPUT, temp_hotend[ee].celsius, STR_PID_DEBUG_OUTPUT, pid_output);
           #if DISABLED(PID_OPENLOOP)
           {
-            SERIAL_ECHOPAIR( STR_PID_DEBUG_PTERM, work_pid[ee].Kp, STR_PID_DEBUG_ITERM, work_pid[ee].Ki, STR_PID_DEBUG_DTERM, work_pid[ee].Kd
+            SERIAL_ECHOPAIR(
+              STR_PID_DEBUG_PTERM, work_pid[ee].Kp,
+              STR_PID_DEBUG_ITERM, work_pid[ee].Ki,
+              STR_PID_DEBUG_DTERM, work_pid[ee].Kd
               #if ENABLED(PID_EXTRUSION_SCALING)
                 , STR_PID_DEBUG_CTERM, work_pid[ee].Kc
               #endif
@@ -2020,33 +2028,29 @@ void Temperature::disable_all_heaters() {
 
   TERN_(AUTOTEMP, planner.autotemp_enabled = false);
 
-  #if HAS_HOTEND
-    HOTEND_LOOP() setTargetHotend(0, e);
-  #endif
-  TERN_(HAS_HEATED_BED, setTargetBed(0));
-  TERN_(HAS_HEATED_CHAMBER, setTargetChamber(0));
-
   // Unpause and reset everything
   TERN_(PROBING_HEATERS_OFF, pause(false));
 
-  #define DISABLE_HEATER(N) {           \
-    setTargetHotend(0, N);              \
-    temp_hotend[N].soft_pwm_amount = 0; \
-    WRITE_HEATER_##N(LOW);              \
-  }
+  #if HAS_HOTEND
+    HOTEND_LOOP() {
+      setTargetHotend(0, e);
+      temp_hotend[e].soft_pwm_amount = 0;
+    }
+  #endif
 
   #if HAS_TEMP_HOTEND
+    #define DISABLE_HEATER(N) WRITE_HEATER_##N(LOW);
     REPEAT(HOTENDS, DISABLE_HEATER);
   #endif
 
   #if HAS_HEATED_BED
-    temp_bed.target = 0;
+    setTargetBed(0);
     temp_bed.soft_pwm_amount = 0;
     WRITE_HEATER_BED(LOW);
   #endif
 
   #if HAS_HEATED_CHAMBER
-    temp_chamber.target = 0;
+    setTargetChamber(0);
     temp_chamber.soft_pwm_amount = 0;
     WRITE_HEATER_CHAMBER(LOW);
   #endif

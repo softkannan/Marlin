@@ -16,7 +16,7 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
  */
 #pragma once
@@ -64,6 +64,7 @@ namespace Language_it {
   PROGMEM Language_Str MSG_AUTO_HOME_Y                     = _UxGT("Home asse Y");
   PROGMEM Language_Str MSG_AUTO_HOME_Z                     = _UxGT("Home asse Z");
   PROGMEM Language_Str MSG_AUTO_Z_ALIGN                    = _UxGT("Allineam.automat. Z");
+  PROGMEM Language_Str MSG_ASSISTED_TRAMMING               = _UxGT("Tramming assistito");
   PROGMEM Language_Str MSG_LEVEL_BED_HOMING                = _UxGT("Home assi XYZ");
   PROGMEM Language_Str MSG_LEVEL_BED_WAITING               = _UxGT("Premi per iniziare");
   PROGMEM Language_Str MSG_LEVEL_BED_NEXT_POINT            = _UxGT("Punto successivo");
@@ -121,6 +122,7 @@ namespace Language_it {
   PROGMEM Language_Str MSG_LCD_TILTING_MESH                = _UxGT("Punto inclinaz.");
   PROGMEM Language_Str MSG_M48_TEST                        = _UxGT("Test sonda M48");
   PROGMEM Language_Str MSG_M48_POINT                       = _UxGT("Punto M48");
+  PROGMEM Language_Str MSG_M48_OUT_OF_BOUNDS               = _UxGT("Sonda oltre i limiti");
   PROGMEM Language_Str MSG_M48_DEVIATION                   = _UxGT("Deviazione");
   PROGMEM Language_Str MSG_IDEX_MENU                       = _UxGT("Modo IDEX");
   PROGMEM Language_Str MSG_OFFSETS_MENU                    = _UxGT("Strumenti Offsets");
@@ -443,9 +445,7 @@ namespace Language_it {
   PROGMEM Language_Str MSG_BABYSTEP_Z                      = _UxGT("Babystep Z");
   PROGMEM Language_Str MSG_BABYSTEP_TOTAL                  = _UxGT("Totali");
   PROGMEM Language_Str MSG_ENDSTOP_ABORT                   = _UxGT("Finecorsa annullati");
-  PROGMEM Language_Str MSG_HEATING_FAILED_LCD              = _UxGT("Riscald. Fallito");
-  PROGMEM Language_Str MSG_HEATING_FAILED_LCD_BED          = _UxGT("Risc. piatto fallito");
-  PROGMEM Language_Str MSG_HEATING_FAILED_LCD_CHAMBER      = _UxGT("Risc. camera fallito");
+  PROGMEM Language_Str MSG_HEATING_FAILED_LCD              = _UxGT("Risc.Fallito"); // Max 12 caratteri
   PROGMEM Language_Str MSG_ERR_REDUNDANT_TEMP              = _UxGT("Err: TEMP RIDONDANTE");
   PROGMEM Language_Str MSG_THERMAL_RUNAWAY                 = _UxGT("TEMP FUORI CONTROLLO");
   PROGMEM Language_Str MSG_THERMAL_RUNAWAY_BED             = _UxGT("TEMP PIAT.FUORI CTRL");
@@ -535,7 +535,6 @@ namespace Language_it {
   PROGMEM Language_Str MSG_RUNOUT_DISTANCE_MM              = _UxGT("Dist mm filo term.");
   PROGMEM Language_Str MSG_KILL_HOMING_FAILED              = _UxGT("Home fallito");
   PROGMEM Language_Str MSG_LCD_PROBING_FAILED              = _UxGT("Sondaggio fallito");
-  PROGMEM Language_Str MSG_M600_TOO_COLD                   = _UxGT("M600:Troppo freddo");
 
   PROGMEM Language_Str MSG_MMU2_CHOOSE_FILAMENT_HEADER     = _UxGT("SCELTA FILAMENTO");
   PROGMEM Language_Str MSG_MMU2_MENU                       = _UxGT("MMU");
@@ -559,7 +558,7 @@ namespace Language_it {
   PROGMEM Language_Str MSG_MMU2_EJECT_RECOVER              = _UxGT("Rimuovi, click");
 
   PROGMEM Language_Str MSG_MIX                             = _UxGT("Miscela");
-  PROGMEM Language_Str MSG_MIX_COMPONENT_N                 = _UxGT("Componente ~");
+  PROGMEM Language_Str MSG_MIX_COMPONENT_N                 = _UxGT("Componente =");
   PROGMEM Language_Str MSG_MIXER                           = _UxGT("Miscelatore");
   PROGMEM Language_Str MSG_GRADIENT                        = _UxGT("Gradiente");
   PROGMEM Language_Str MSG_FULL_GRADIENT                   = _UxGT("Gradiente pieno");
