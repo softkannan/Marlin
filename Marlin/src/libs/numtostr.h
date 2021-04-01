@@ -23,8 +23,14 @@
 
 #include <stdint.h>
 
-// Convert a full-range unsigned 8bit int to a percentage
+// Format uint8_t (0-100) as rj string with 123% / _12% / __1% format
+const char* pcttostrpctrj(const uint8_t i);
+
+// Convert uint8_t (0-255) to a percentage, format as above
 const char* ui8tostr4pctrj(const uint8_t i);
+
+// Convert uint8_t to string with 12 format
+const char* ui8tostr2(const uint8_t x);
 
 // Convert uint8_t to string with 123 format
 const char* ui8tostr3rj(const uint8_t i);
@@ -54,6 +60,9 @@ const char* i16tostr3left(const int16_t xx);
 
 // Convert signed int to rj string with _123, -123, _-12, or __-1 format
 const char* i16tostr4signrj(const int16_t x);
+
+// Convert unsigned float to string with 1.2 format
+const char* ftostr11ns(const float &x);
 
 // Convert unsigned float to string with 1.23 format
 const char* ftostr12ns(const float &x);

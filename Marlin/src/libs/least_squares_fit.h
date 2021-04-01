@@ -30,7 +30,6 @@
  * it saves roughly 10K of program memory.   And even better...  the data
  * fed into the algorithm does not need to all be present at the same time.
  * A point can be probed and its values fed into the algorithm and then discarded.
- *
  */
 
 #include "../inc/MarlinConfig.h"
@@ -38,7 +37,7 @@
 
 struct linear_fit_data {
   float xbar, ybar, zbar,
-        x2bar, y2bar, z2bar,
+        x2bar, y2bar,
         xybar, xzbar, yzbar,
         max_absx, max_absy,
         A, B, D, N;
@@ -57,7 +56,6 @@ inline void incremental_WLSF(struct linear_fit_data *lsf, const float &x, const 
   lsf->zbar  += wz;
   lsf->x2bar += wx * x;
   lsf->y2bar += wy * y;
-  lsf->z2bar += wz * z;
   lsf->xybar += wx * y;
   lsf->xzbar += wx * z;
   lsf->yzbar += wy * z;
@@ -75,7 +73,6 @@ inline void incremental_LSF(struct linear_fit_data *lsf, const float &x, const f
   lsf->zbar += z;
   lsf->x2bar += sq(x);
   lsf->y2bar += sq(y);
-  lsf->z2bar += sq(z);
   lsf->xybar += x * y;
   lsf->xzbar += x * z;
   lsf->yzbar += y * z;

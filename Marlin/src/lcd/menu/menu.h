@@ -21,7 +21,7 @@
  */
 #pragma once
 
-#include "../ultralcd.h"
+#include "../marlinui.h"
 #include "../../libs/numtostr.h"
 #include "../../inc/MarlinConfig.h"
 
@@ -39,7 +39,7 @@ typedef void (*selectFunc_t)();
 #define SS_INVERT  0x02
 #define SS_DEFAULT SS_CENTER
 
-#if HAS_GRAPHICAL_LCD && EITHER(BABYSTEP_ZPROBE_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)
+#if HAS_MARLINUI_U8GLIB && EITHER(BABYSTEP_ZPROBE_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)
   void _lcd_zoffset_overlay_gfx(const float zvalue);
 #endif
 
@@ -172,14 +172,14 @@ class MenuEditItemBase : public MenuItemBase {
   public:
     // Implemented for HD44780 and DOGM
     // Draw the current item at specified row with edit data
-    static void draw(const bool sel, const uint8_t row, PGM_P const pstr, const char* const inStr, const bool pgm=false);
+    static void draw(const bool sel, const uint8_t row, PGM_P const pstr, const char * const inStr, const bool pgm=false);
 
     // Implemented for HD44780 and DOGM
     // This low-level method is good to draw from anywhere
-    static void draw_edit_screen(PGM_P const pstr, const char* const value);
+    static void draw_edit_screen(PGM_P const pstr, const char * const value);
 
     // This method is for the current menu item
-    static inline void draw_edit_screen(const char* const value) { draw_edit_screen(editLabel, value); }
+    static inline void draw_edit_screen(const char * const value) { draw_edit_screen(editLabel, value); }
 };
 
 #if ENABLED(SDSUPPORT)
@@ -215,8 +215,12 @@ void _lcd_draw_homing();
   void line_to_z(const float &z);
 #endif
 
-#if HAS_GRAPHICAL_LCD && EITHER(BABYSTEP_ZPROBE_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)
+#if HAS_MARLINUI_U8GLIB && EITHER(BABYSTEP_ZPROBE_GFX_OVERLAY, MESH_EDIT_GFX_OVERLAY)
   void _lcd_zoffset_overlay_gfx(const float zvalue);
+#endif
+
+#if ENABLED(PROBE_OFFSET_WIZARD)
+  void goto_probe_offset_wizard();
 #endif
 
 #if ENABLED(LCD_BED_LEVELING) || (HAS_LEVELING && DISABLED(SLIM_LCD_MENUS))
@@ -245,3 +249,8 @@ void _lcd_draw_homing();
 #if ENABLED(TOUCH_SCREEN_CALIBRATION)
   void touch_screen_calibration();
 #endif
+
+extern uint8_t screen_history_depth;
+inline void clear_menu_history() { screen_history_depth = 0; }
+
+#define STICKY_SCREEN(S) []{ ui.defer_status_screen(); ui.goto_screen(S); }
