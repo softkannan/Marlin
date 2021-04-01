@@ -292,6 +292,10 @@ void GCodeParser::parse(char *p) {
   switch (letter) {
 
     case 'G': case 'M': case 'T': TERN_(MARLIN_DEV_MODE, case 'D':)
+    /* Anycubic Specific custom gcode */
+    case 'X':
+    /* Anycubic custom gcode end */
+    
       // Skip spaces to get the numeric part
       while (*p == ' ') p++;
 

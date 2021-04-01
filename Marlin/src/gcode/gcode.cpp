@@ -990,6 +990,15 @@ void GcodeSuite::process_parsed_command(const bool no_ok/*=false*/) {
     #if ENABLED(MARLIN_DEV_MODE)
       case 'D': D(parser.codenum); break;                         // Dn: Debug codes
     #endif
+    /* Anycubic Specific custom gcode */
+    case 'X': switch (parser.codenum) {
+
+      case 0: X0(); break;
+
+      default: parser.unknown_command_warning(); break;
+    }
+    break;
+    /* Anycubic custom gcode end */
 
     default:
       #if ENABLED(WIFI_CUSTOM_COMMAND)

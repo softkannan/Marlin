@@ -1079,6 +1079,10 @@ private:
 
   static void T(const int8_t tool_index);
 
+  /* Anycubic Specific custom gcode */
+  static void X0();
+  /* Anycubic custom gcode end */
+
 };
 
 extern GcodeSuite gcode;
