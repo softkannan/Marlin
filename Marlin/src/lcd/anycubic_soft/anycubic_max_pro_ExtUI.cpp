@@ -38,6 +38,10 @@ namespace ExtUI {
   void onPrintTimerPaused() { AnycubicTFT.onPrintTimerPaused(); }
   void onPrintTimerStopped() { AnycubicTFT.onPrintTimerStopped(); }
 
+  void onHomingStart() {}
+  void onHomingComplete() {}
+  void onPrintFinished() {}
+
   void onFilamentRunout(const extruder_t extruder) {
 #ifdef FILAMENT_RUNOUT_SENSOR
     AnycubicTFT.FilamentRunout();
@@ -45,11 +49,6 @@ namespace ExtUI {
   }
 
   void onUserConfirmRequired(const char * const msg) {
-
-    ANYCUBIC_TFT_DEBUG_PRINT_PGM("Confirm:");
-    ANYCUBIC_TFT_DEBUG_PRINT(msg);
-    ANYCUBIC_TFT_DEBUG_PRINT_EOL();
-
     AnycubicTFT.onUserConfirmRequired(msg);
   }
 
@@ -93,11 +92,10 @@ namespace ExtUI {
 
   #if HAS_MESH
     void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float zval) {
-      // Called when any mesh points are updated
-    }
+    void onMeshLevelingStart() {}
 
-    void onMeshUpdate(const int8_t xpos, const int8_t ypos, const ExtUI::probe_state_t state) {
-      // Called to indicate a special condition
+    void onMeshUpdate(const int8_t xpos, const int8_t ypos, const float &zval) {
+      // Called when any mesh points are updated
     }
   #endif
 
@@ -112,6 +110,9 @@ namespace ExtUI {
       // Called on resume from power-loss
     }
   #endif
+
+  void onSteppersDisabled() {}
+  void onSteppersEnabled()  {}
 }
 
 #endif // EXTUI_EXAMPLE && EXTENSIBLE_UI

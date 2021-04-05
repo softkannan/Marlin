@@ -50,9 +50,10 @@
 
     #ifdef ANYCUBIC_GENERIC_SERIAL
       #if MOTHERBOARD == BOARD_TRIGORILLA_14
-        #define INTERNAL_SERIAL_PORT 3
+        //#define LCD_SERIAL_PORT 3
+        #define LCD_SERIAL_PORT 3
       #elif MOTHERBOARD == BOARD_BIGTREE_SKR_V1_3
-        #undef SERIAL_PORT_2
+        #undef LCD_SERIAL_PORT
       #endif
     #else
       #define ANYCUBIC_TFT_SERIAL
@@ -158,7 +159,7 @@
   // SD Card
   // D53 D51 GND 5V D52 D50 D49 GND
   #define SDPOWER_PIN         -1
-  #define SDSS                53 // SD Card Chil Select pin / SD Card CS Pin for SIDO communication
+  //#define SDSS              53 // SD Card Chil Select pin / SD Card CS Pin for SIDO communication
   //#define SCK_PIN           52
   //#define MISO_PIN          50
   //#define MOSI_PIN          51

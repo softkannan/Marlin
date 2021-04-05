@@ -9,13 +9,13 @@
 #include "../../inc/MarlinConfig.h"
 
 #if defined(__AVR__)
-  #define TFT_SERIAL internalSerial
+  #define TFT_SERIAL LCD_SERIAL
   #define STREAM_SIZE_T int
   #define STREAM_INT16_T int
 #elif defined(ANYCUBIC_GENERIC_SERIAL) && defined(TARGET_LPC1768)
   #define STREAM_SIZE_T size_t
   #define STREAM_INT16_T int16_t
-  #define TFT_SERIAL MSerial
+  #define TFT_SERIAL LCD_SERIAL
 #else
    #error "anycubic TFT is not supported given target processor."
 #endif

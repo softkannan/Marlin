@@ -32,12 +32,12 @@
 #include "anycubic_generic_serial.h"
 
 #if defined(__AVR__)
-  #ifndef INTERNAL_SERIAL_PORT
-    #error "anycubic TFT INTERNAL_SERIAL_PORT must be defined."
+  #ifndef LCD_SERIAL_PORT
+    #error "anycubic TFT LCD_SERIAL_PORT must be defined."
   #endif
 #elif defined(ANYCUBIC_GENERIC_SERIAL) && defined(TARGET_LPC1768)
-  #ifdef SERIAL_PORT_2
-    #error "anycubic TFT uses SERIAL_PORT_2 exclusively."
+  #ifdef LCD_SERIAL_PORT
+    #error "anycubic TFT uses LCD_SERIAL_PORT exclusively."
   #else
     #include "../../HAL_LPC1768/MarlinSerial.h"
     MarlinSerial MSerial(LPC_UART0);
